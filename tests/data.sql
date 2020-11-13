@@ -1,7 +1,7 @@
-"""
-Each test will create a new temporary database file and populate some
+/* Each test will create a new temporary database file and populate some
  data that will be used in the tests.
-"""
+*/
+
 
 INSERT INTO user (username, password)
 VALUES
