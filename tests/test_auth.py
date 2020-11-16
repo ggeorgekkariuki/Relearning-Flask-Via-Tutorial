@@ -48,3 +48,40 @@ def test_register_validate_input(client, username, password, message):
 4. pytest.mark.parametrize 
     tells Pytest to run the same test function with different arguments. You use it here to test different invalid input and error messages without writing the same code three times.
 """
+
+# TESTING THE LOGIN
+'''
+Tests for login are similar to tests for registration.
+However, the difference is that we do not check data against what is in the
+ database, but what is stored in the 'session'.
+'''
+
+def test_login(client, auth):
+    assert client.get('/auth/login').status_code == 200
+    response = auth.login()
+    assert response.headers['Location'] == 'http://localhost/'
+
+    with client:
+        client.get('/')
+        assert session['user_id'] == 1
+        assert g.user['username'] == 'test'
+
+@pytest.mark.parametrize(('username', 'password', 'message'),(
+    ('a', 'test', b'Incorrect username.'),
+    ('test', 'a', b'Incorrect password.'),
+))
+def test_login_validate_input(auth, username, password, message):
+    response = auth.login(username, password)
+    assert message in response.data
+
+# TESTING THE LOGOUT
+'''
+There should be no data in the session.
+'''
+
+def test_logout(client, auth):
+    auth.login()
+
+    with client:
+        auth.logout()
+        assert 'user_id' not in session

@@ -68,3 +68,27 @@ Runner - creates a runner that can call the Click conmmands registered
  with the application. 
 '''
 
+# AUTHENTICATION
+'''
+This class is used to ensure that the 'test' user is logged in to access all
+ the views that require authentication before accessing the view.
+'''
+class AuthActions(object):
+    def __init__(self, client):
+        self._client = client
+
+    def login(self, username='test', password='test'):
+        return self._client.post(
+            '/auth/login',
+            data={'username': username, 'password':password}
+        )
+
+    def logout(self):
+        return self._client.get('/auth/logout')
+
+''' 
+With the auth fixture we can call '/auth/login' to log in as test user
+'''
+@pytest.fixture
+def auth(client):
+    return AuthActions(client)
