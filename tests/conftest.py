@@ -8,6 +8,9 @@ Install pytest and coverage in your environment
 
 The 'app' fixture will call the application factory in __init__.py and 
  pass 'test_config' to configure the application and db for testing.
+
+NB: A fixture is function that needs to run first before each test.
+The purpose of fixtures is to provide a fixed baseline upon which tests can reliably and repeatedly execute.
 """
 
 import os
